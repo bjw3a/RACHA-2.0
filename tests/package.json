@@ -1,0 +1,13 @@
+{
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node phase4.mjs && node phase4-dom.mjs && node phase4.1.mjs && node phase4.2.mjs && node phase4.2.1.mjs && node phase4.2.2.mjs",
+    "test:browser": "node browser.mjs && node phase4.1-browser.mjs && node phase4.2-browser.mjs && node phase4.2.2-browser.mjs"
+  },
+  "devDependencies": {
+    "@sinonjs/fake-timers": "15.4.0",
+    "jsdom": "30.0.1",
+    "playwright": "^1.51.1"
+  }
+}
