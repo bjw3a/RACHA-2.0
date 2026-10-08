@@ -1,3 +1,12 @@
+# Phase 4.4 — Eight Integrated Activities (October 8, 2026)
+
+- Preserved Match-Up, Recognition, Typing, In Context, and Story Challenge; integrated Listen & Choose, Listen & Type, and Read & Record as Levels 6–8.
+- Updated topic paths, locked/replay states, completion indicators, summaries, and email reports for eight activities; removed the optional practice entry/menu.
+- Listening attempts use ten questions and an 80% threshold. An incorrect answer remains incorrect in that attempt; unlimited whole-round retries are available.
+- Speaking requires a recording and completed playback for every prompt, with an explicit practice-aloud fallback when the microphone is unavailable. No pronunciation score is stored or shown.
+- Preserved the storage key, original mastery, XP, achievements, content, and teacher email. Old five-level completion dates are invalidated; new eight-level completion gets its own date.
+- Added capped audio activity rewards, migration/regression/UI tests, and PHASE-4.4.md. Current automated and Chromium synthetic-microphone checks passed.
+
 # Phase 4.3.1 — Structured Listening & Speaking (October 7, 2026)
 
 - Moved optional Listen & Speak above the required Up Next card.

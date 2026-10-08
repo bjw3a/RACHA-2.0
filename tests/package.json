@@ -2,8 +2,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node phase4.mjs && node phase4-dom.mjs && node phase4.1.mjs && node phase4.2.mjs && node phase4.2.1.mjs && node phase4.2.2.mjs",
-    "test:browser": "node browser.mjs && node phase4.1-browser.mjs && node phase4.2-browser.mjs && node phase4.2.2-browser.mjs"
+    "test": "node phase4.4-core.mjs && node phase4.4-context.mjs && node phase4.2.4.mjs && node phase4.2.4-navigation.mjs && node phase4.3.mjs && node phase4.3.1.mjs && node phase4.4.mjs && node phase4.4-original-levels.mjs && node phase4.4-dom.mjs && node phase4.4-completion.mjs",
+    "test:browser": "node phase4.4-browser.mjs"
   },
   "devDependencies": {
     "@sinonjs/fake-timers": "15.4.0",

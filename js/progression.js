@@ -1,5 +1,5 @@
 // Mastery is independent of arcade points, XP and personal records.
-export const sequence = ['match','quick','lives','streak','story'];
+export const sequence = ['match','quick','lives','streak','story','choose','type','record'];
 export const minimum = mode => mode === 'match' ? 6 : ['story','streak'].includes(mode) ? 5 : 10;
 export const progressKey = (course, topic) => `${course}:${topic}`;
 export function levelState(profile, course, topic) {
@@ -13,6 +13,15 @@ export function canPlay(profile, course, topic, mode) {
   return index >= 0 && (state.complete || index <= state.next);
 }
 export function assess(g) {
+  if (g.mode === 'record') {
+    const enough = g.promptCount > 0 && g.practiced === g.promptCount;
+    return {total:g.promptCount, correct:0, percent:null, enough, passed:enough, completionBased:true};
+  }
+  if (['choose','type'].includes(g.mode)) {
+    const total=g.promptCount, correct=g.correct;
+    const enough=total>0 && g.attempts===total;
+    return {total,correct,percent:total ? correct/total*100 : 0,enough,passed:enough && correct*5>=total*4};
+  }
   const total = g.mode === 'match' ? g.assessedPairs : g.attempts;
   const correct = g.mode === 'match' ? g.firstPairCorrect : g.correct;
   const enough = total >= minimum(g.mode);
@@ -28,6 +37,6 @@ export function recordMastery(profile, g) {
   const previous = levels[g.mode] || {completed:false,best:0};
   levels[g.mode] = {completed:previous.completed || result.passed,
     completedAt:previous.completedAt || (result.passed ? new Date().toISOString() : null),
-    best:result.enough ? Math.max(previous.best, result.percent) : previous.best};
+    best:result.completionBased ? null : result.enough ? Math.max(previous.best, result.percent) : previous.best};
   return result;
 }

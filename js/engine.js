@@ -6,3 +6,10 @@ export function answer(g,ok,seconds=8){if(g.ended)return;g.attempts++;if(ok){g.c
 
 const refinements={quick:['Recognition','Choose the correct answer.','10 questions. Reach 80% to advance.'],lives:['Typing','Type your answer.','10 answers. Accents and punctuation are optional.'],streak:['In Context','Complete the sentences.','Use the word bank to complete five Spanish sentences.']};
 for(const m of modes){if(refinements[m.id]){[m.name,m.desc,m.detail]=refinements[m.id];}}
+
+// Integrated audio levels use the existing topic-specific practice engines.
+modes.push(
+ {id:'choose',icon:'♫',name:'Listen & Choose',desc:'Listen to Spanish and choose the answer. Reach 80% to advance.'},
+ {id:'type',icon:'♪',name:'Listen & Type',desc:'Type what you hear in Spanish. Reach 80% to advance.'},
+ {id:'record',icon:'◉',name:'Read & Record',desc:'Record, play back, and compare each prompt. Completion-based; no pronunciation grade.'}
+);

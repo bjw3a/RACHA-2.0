@@ -1,3 +1,13 @@
+# Current release: Phase 4.4
+
+Run `cd tests`, `npm ci`, `npm test`, then `npx playwright install chromium` and `npm run test:browser`.
+The current scripts select Phase 4.4 regression gates and unchanged content/audio checks.
+See PHASE-4.4.md for tested cases and physical-device limitations.
+Historical instructions below document earlier releases; old optional-menu/five-level/Flashcards
+UI assertions are superseded by the Phase 4.4 suites.
+
+---
+
 # Phase 4.2.2 validation
 
 See PHASE-4.2.2.md for current coverage and the school-device email limitation. The historical results below describe earlier releases.
