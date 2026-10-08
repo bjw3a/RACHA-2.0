@@ -1,3 +1,4 @@
+import {sequence} from './progression.js';
 import {createPracticeSession,dictationCorrect} from './practice-sessions.js';
 import {createPracticeAudio} from './practice-audio.js';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -38,7 +39,7 @@ export function openPractice(main,{course,topic,label,mode,enabled,back,complete
  const soundHint=()=>enabled()?'Replay as often as you like.':'Sound is off. Turn Sound on above to listen.';
  function shell(title,body){
   audio.dispose();
-  main.innerHTML=`<section class="game-shell practice-shell"><div class="game-top"><div><span class="eyebrow">SPANISH ${course} · LEVEL ${({choose:6,type:7,record:8})[mode]}</span><h2 id="practice-title" tabindex="-1">${esc(title)}</h2><p>${esc(label)}</p></div><button id="practice-back" class="quiet">← Back to Topic</button></div>${body}</section>`;
+  main.innerHTML=`<section class="game-shell practice-shell"><div class="game-top"><div><span class="eyebrow">SPANISH ${course} · LEVEL ${sequence.indexOf(mode)+1}</span><h2 id="practice-title" tabindex="-1">${esc(title)}</h2><p>${esc(label)}</p></div><button id="practice-back" class="quiet">← Back to Topic</button></div>${body}</section>`;
   $('#practice-back').onclick=back;$('#practice-title').focus({preventScroll:true});window.scrollTo({top:0,behavior:'instant'});
  }
  function start(){items=createPracticeSession(course,topic,mode);index=0;firstCorrect=0;practiced=0;result=null;render();}

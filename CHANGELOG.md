@@ -1,3 +1,13 @@
+# Phase 4.5 — Interleaved Listening and Speaking (October 8, 2026)
+
+- Based on the exact `Racha-2.0-Phase-4.4(2).zip`; no repository changes or new repository.
+- Reordered existing activities: Match-Up → Listen & Choose → Recognition → Listen & Type → Typing → Read & Record → In Context → Story Challenge.
+- Kept mastery associated with stable activity IDs; no storage rewrite, reward replay, or numbered-level migration is needed.
+- Made every mastered activity replayable even when earlier prerequisites are unfinished. Up Next and result continuation target the earliest missing activity and skip already-mastered ones.
+- Updated audio level labels, mastery instructions, locked-state hints, and final Story replay. Completion still requires all eight activities.
+- Preserved all questions, scoring, reward/storage logic, audio behavior, teacher email, curriculum, styling, and disabled Flashcards.
+- Added migration examples A–E, all 256 mastery combinations, fresh journeys in both courses, and updated audio/browser regressions. See PHASE-4.5.md.
+
 # Phase 4.4 — Eight Integrated Activities (October 8, 2026)
 
 - Preserved Match-Up, Recognition, Typing, In Context, and Story Challenge; integrated Listen & Choose, Listen & Type, and Read & Record as Levels 6–8.

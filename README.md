@@ -1,9 +1,10 @@
-# Racha 2.0 — Phase 4.4
+# Racha 2.0 — Phase 4.5
 
-Complete static application, upgraded incrementally from `Racha-2.0-Phase-4.3.1(1).zip`.
-See **PHASE-4.4.md** for changes, migration, validation, and limitations.
+Complete static application, upgraded incrementally from `Racha-2.0-Phase-4.4(2).zip`.
+See **PHASE-4.5.md** for changes, migration, validation, and limitations.
 
-Each existing topic now has eight integrated activities. Listening uses 80% mastery;
+Each existing topic has eight interleaved activities: Match-Up, Listen & Choose, Recognition,
+Listen & Type, Typing, Read & Record, In Context, and Story Challenge. Listening uses 80% mastery;
 speaking uses explicit practice completion without a pronunciation score.
 Existing same-browser mastery, XP, achievements, and teacher email configuration are preserved.
 
@@ -24,4 +25,4 @@ In `tests`, run `npm ci`, then `npm test`.
 For browser checks, run `npx playwright install chromium` and `npm run test:browser`.
 Optionally set `RACHA_CHROMIUM` to a Chromium executable and `RACHA_QA_DIR` for screenshots.
 Development dependencies and tests are not needed to run the static application.
-Historical phase tests and documentation are retained; the package scripts select the current Phase 4.4 gates.
+Historical phase tests and documentation are retained; the package scripts select the current Phase 4.5 gates.

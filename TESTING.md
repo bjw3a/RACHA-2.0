@@ -1,3 +1,14 @@
+# Current release: Phase 4.5
+
+In `tests`, run `npm ci` and `npm test`. For Chromium, run `npx playwright install chromium`
+and `npm run test:browser`. Current scripts select ten regression suites and the Phase 4.5 browser suite.
+
+The exact Phase 4.4 source's ten regression suites were run successfully before upgrading.
+Order-dependent tests have Phase 4.5 replacements; older phase tests/documentation remain below
+and in the archive as historical references. See PHASE-4.5.md for migration cases and limitations.
+
+---
+
 # Current release: Phase 4.4
 
 Run `cd tests`, `npm ci`, `npm test`, then `npx playwright install chromium` and `npm run test:browser`.

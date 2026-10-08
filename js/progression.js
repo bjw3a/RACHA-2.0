@@ -1,5 +1,5 @@
 // Mastery is independent of arcade points, XP and personal records.
-export const sequence = ['match','quick','lives','streak','story','choose','type','record'];
+export const sequence = ['match','choose','quick','type','lives','record','streak','story'];
 export const minimum = mode => mode === 'match' ? 6 : ['story','streak'].includes(mode) ? 5 : 10;
 export const progressKey = (course, topic) => `${course}:${topic}`;
 export function levelState(profile, course, topic) {
@@ -10,7 +10,7 @@ export function levelState(profile, course, topic) {
 }
 export function canPlay(profile, course, topic, mode) {
   const state = levelState(profile, course, topic), index = sequence.indexOf(mode);
-  return index >= 0 && (state.complete || index <= state.next);
+  return index >= 0 && (state.levels[mode]?.completed || state.complete || index === state.next);
 }
 export function assess(g) {
   if (g.mode === 'record') {
