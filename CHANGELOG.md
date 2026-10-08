@@ -1,3 +1,11 @@
+# Phase 4.3.1 — Structured Listening & Speaking (October 7, 2026)
+
+- Moved optional Listen & Speak above the required Up Next card.
+- Added clear Listen & Choose, Listen & Type, and Read & Record activity menus.
+- Added ten-prompt topic-based sessions, Check/retry feedback, delayed transcripts, forgiving dictation, and completion/restart/back screens.
+- Preserved working Phase 4.3 audio/recording, private temporary recordings, disabled Flashcards, five mastery activities, and saved progress.
+- Added data/DOM/browser regression scripts and PHASE-4.3.1.md. Data and DOM tests passed; browser startup was blocked by the execution environment, so fresh visual/device checks remain outstanding.
+
 # Phase 4.3 — Listening & Speaking (October 7, 2026)
 
 - Added optional topic-based sentence, vocabulary, and listening practice for both courses.

@@ -50,3 +50,14 @@
 #practice-status{min-height:3em;margin-top:20px}
 @media(max-width:520px){.practice-tabs button{flex:1 1 100%}.practice-shell .game-top{flex-wrap:wrap}.practice-controls button{width:100%}}
 .practice-icon{display:inline-block;width:1.15em;height:1.15em;vertical-align:-.2em;margin-right:.3em;flex-shrink:0}
+
+/* Phase 4.3.1 — structured optional practice, scoped to the new area. */
+.optional-practice{justify-content:space-between;border:1px solid var(--line);border-radius:16px;background:var(--panel);padding:18px 20px;margin:18px 0}
+.optional-practice h3{font-size:20px;margin:6px 0}.optional-practice p{font-size:14px}.optional-practice .eyebrow{font-size:10px}.optional-practice button{min-height:48px}
+.practice-menu{display:grid;gap:16px;margin:24px 0}.practice-card{text-align:left;display:grid;gap:10px;padding:24px}.practice-card strong{font-size:23px}.practice-card>span{color:var(--muted);font-weight:400}.practice-card>span:last-child{color:var(--accent);font-weight:700}
+.practice-progress{color:var(--ink);font-weight:800;margin:24px 0 10px}.practice-listen{margin:18px 0 24px;min-height:56px!important;width:100%}
+.practice-choices [aria-pressed="true"]{outline:2px solid var(--accent);background:var(--panel)}
+#dictation-form{margin-top:20px}#dictation-form .accent-keys{margin:14px 0}#practice-feedback{margin-top:20px;font-weight:750;color:var(--ink)}#practice-transcript{margin-top:16px;color:var(--ink)}
+#record-indicator{color:var(--bad);font-weight:800}.practice-finish-actions{display:grid;gap:12px;margin-top:24px}
+.practice-shell [hidden]{display:none!important}.practice-shell .practice-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.practice-shell .practice-controls button{min-width:0}
+@media(max-width:520px){.optional-practice{padding:16px;gap:12px}.optional-practice button{width:100%}.practice-card{padding:20px}.practice-card strong{font-size:21px}.practice-shell .practice-controls{grid-template-columns:1fr}}
