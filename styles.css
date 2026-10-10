@@ -66,3 +66,7 @@
 #practice-fallback{border:1px solid var(--line);border-radius:12px;padding:16px;margin-top:20px}
 #practice-fallback label{display:flex;align-items:center;gap:12px;min-height:48px;cursor:pointer}
 #confirm-practice{width:24px;height:24px;flex:0 0 24px;padding:0;accent-color:var(--lime)}
+
+/* Keep the complete beginner reference usable on phones and long number/time banks. */
+.learning-reference ul{max-height:22rem;overflow:auto;padding-right:1rem;line-height:1.8}
+.learning-reference li{overflow-wrap:anywhere}

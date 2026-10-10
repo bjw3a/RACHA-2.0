@@ -41,11 +41,11 @@ export function createPracticeAudio({enabled, notify=()=>{}, state=()=>{}, heard
    recorder.onstop=()=>{if(id!==generation)return;clearTimeout(limit);releaseTracks();recorder=null;busy=false;
     const blob=new Blob(chunks,{type:active.mimeType||chunks[0]?.type||'audio/webm'});
     if(!blob.size){state('idle');unavailable('microphone');tell('No recording was captured. Please try again.');return;}
-    try{url=URL.createObjectURL(blob);player=new Audio(url);player.onended=()=>{if(id===generation){played();tell('Now hear the Spanish again and compare.');}};player.onerror=()=>tell('Recording could not play. Please record again.');state('ready');tell('Recording ready. Play it and compare.');}catch{clearRecording();tell('Recording could not play. Please try again.');}
+    try{url=URL.createObjectURL(blob);player=new Audio(url);player.onended=()=>{if(id===generation){played();tell('Now hear the Spanish again and compare.');}};player.onerror=()=>{unavailable('microphone');tell('Recording could not play. Record again or use practice aloud.');};state('ready');tell('Recording ready. Play it and compare.');}catch{clearRecording();unavailable('microphone');tell('Recording could not play. Record again or use practice aloud.');}
    };
    recorder.start();state('recording');tell('Recording… Press Stop when you finish.');limit=setTimeout(stop,60000);
   }catch{if(id===generation){clearRecording();unavailable('microphone');tell('Microphone unavailable. Listen to the model, practice aloud, then confirm that you practiced.');}}
  }
- async function play(){if(!enabled()){tell('Sound is off. Turn Sound on above to listen.');return;}if(!player||busy)return;stopSpeech();pause();const id=generation;try{await player.play();if(id===generation)tell('Playing your recording…');}catch{if(id===generation)tell('Playback interrupted. Try Play again.');}}
+ async function play(){if(!enabled()){tell('Sound is off. Turn Sound on above to listen.');return;}if(!player||busy)return;stopSpeech();pause();const id=generation;try{await player.play();if(id===generation)tell('Playing your recording…');}catch{if(id===generation){unavailable('microphone');tell('Playback interrupted. Try Play again or use practice aloud.');}}}
  return {speakSpanish,record,stop,play,clearRecording,stopAudio(){stopSpeech();pause();},dispose(){stopSpeech();clearRecording();}};
 }

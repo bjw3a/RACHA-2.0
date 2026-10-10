@@ -1,4 +1,4 @@
-import {contentTopics} from './curriculum.js';
+import {contentTopics,introductoryTopic} from './curriculum.js';
 import {readings} from './readings.js';
 export const pick = a => a[Math.floor(Math.random()*a.length)];
 export const shuffle = a => {const b=[...a]; for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;};
@@ -17,6 +17,8 @@ export const vocab={
  er:rows('comer~to eat|beber~to drink|aprender~to learn|leer~to read|correr~to run|vender~to sell|comprender~to understand'),
  ir:rows('escribir~to write|vivir~to live|abrir~to open|recibir~to receive|compartir~to share|asistir~to attend'),
  gusta:rows('bailar~to dance|cantar~to sing|leer~to read|dibujar~to draw|estudiar~to study|escuchar música~to listen to music|correr~to run|escribir~to write')};
+// Introduced in matching/recognition/typing before beginner audio.
+vocab.greetings.push(...rows('Buenos días, profesora.~Good morning, teacher'));
 // Phase 2 additions stay in existing topics and retain every original row.
 vocab.family.push(...rows('la familia~family|los hijos~children (sons and daughters)|los hermanos~siblings|la bisabuela~great-grandmother|el bisabuelo~great-grandfather|los parientes~relatives'));
 const schoolSubjects = [...vocab.subjects];
@@ -40,8 +42,17 @@ export function conjugate(v,i){return v.slice(0,-2)+endings[v.slice(-2)][i];}
 const contexts={preguntar:'en clase',contestar:'la pregunta',necesitar:'un lápiz',preparar:'la tarea',repasar:'la lección',responder:'al profesor',describir:'una foto',hablar:'español en clase',estudiar:'para el examen',escuchar:'música en casa',bailar:'en la fiesta',cantar:'en el coro',trabajar:'en una tienda',dibujar:'un mapa',caminar:'al parque',practicar:'español con amigos',comprar:'un libro',comer:'fruta',beber:'agua',aprender:'español',leer:'un libro',correr:'en el parque',vender:'camisetas',comprender:'la pregunta',escribir:'un mensaje',vivir:'en Nashville',abrir:'la puerta',recibir:'un mensaje',compartir:'la comida',asistir:'a clase'};
 export const adjectives=adjectiveWords.map(([es])=>es);
 export function agree(a,f,p){let s=a.endsWith('o')&&f?a.slice(0,-1)+'a':a==='trabajador'&&f?'trabajadora':a;return s+(p?(s.endsWith('r')?'es':'s'):'');}
-// Vowel accents are optional; ñ is deliberately preserved.
-export function normalize(s){return String(s).toLowerCase().normalize('NFC').replace(/[áàäâ]/g,'a').replace(/[éèëê]/g,'e').replace(/[íìïî]/g,'i').replace(/[óòöô]/g,'o').replace(/[úùüû]/g,'u').replace(/[’']/g,'').replace(/[^\p{L}\p{N}\s]/gu,' ').replace(/\s+/g,' ').trim();}
+// Shared grading policy: preserve letters (including ñ), numbers, order and boundaries.
+// Future spelling exercises may opt into {accentsRequired:true}; defaults are beginner-friendly.
+export function normalize(s,{accentsRequired=false}={}){
+ let text=String(s).normalize('NFC').toLocaleLowerCase('es');
+ if(!accentsRequired)text=text.replace(/[áàäâ]/g,'a').replace(/[éèëê]/g,'e').replace(/[íìïî]/g,'i').replace(/[óòöô]/g,'o').replace(/[úùüû]/g,'u');
+ return text.replace(/[’‘ʼ']/g,'').replace(/[^\p{L}\p{N}\s]/gu,' ').replace(/\s+/gu,' ').trim();
+}
+export function answersMatch(value,answers,policy={}){
+ const actual=normalize(value,policy);
+ return actual.length>0 && answers.some(answer=>normalize(answer,policy)===actual);
+}
 // Only generated time questions use this equivalence rule. Keep number-internal y.
 function normalizeTime(value){
  const text=normalize(value);
@@ -50,8 +61,8 @@ function normalizeTime(value){
   .replace(/^(una|dos|tres|cuatro|cinco|seis|siete|ocho|nueve|diez|once|doce) y /,'$1 ');
 }
 export const isCorrect=(value,q)=>{
- const norm=q.time?normalizeTime:normalize;
- return q.answers.some(a=>norm(a)===norm(value));
+ if(q.time)return q.answers.some(a=>normalizeTime(a)===normalizeTime(value));
+ return answersMatch(value,q.answers,q);
 };
 function q(prompt,answer,pool,explanation,extra={}){return {prompt,answers:Array.isArray(answer)?answer:[answer],pool,explanation,...extra};}
 export function timeAnswers(h,m){const base=h===1?'Es la una':'Son las '+number(h);return m===0?[base,base+' en punto']:[base+' y '+number(m),...(m===15?[base+' y cuarto']:m===30?[base+' y media']:[])];}
@@ -90,9 +101,12 @@ function scopedStory(course,selection){
 
 // Sentence completion uses existing topic passages, with a Spanish word bank.
 export function application(course,topic){
- const r=story(course,topic),sentences=r.text.split(/(?<=[.!?])\s+/u).filter(x=>x.length>15);
+ const r=story(course,topic),selected=contentTopics(course,topic);
+ const known=selected.every(t=>introductoryTopic(course,t))?new Set(selected.flatMap(t=>matchBank(course,t)).flatMap(([es])=>normalize(es).split(' '))):null;
+ const candidates=sentence=>[...sentence.matchAll(/\p{L}{4,}/gu)].filter(word=>!known||known.has(normalize(word[0])));
+ const sentences=r.text.split(/(?<=[.!?])\s+/u).filter(x=>candidates(x).length);
  const questions=shuffle(sentences).slice(0,5).map(sentence=>{
-  const words=[...sentence.matchAll(/\p{L}{4,}/gu)];
+  const words=candidates(sentence);
   const word=pick(words),answer=word[0];
   return q(sentence.slice(0,word.index)+'___'+sentence.slice(word.index+answer.length),answer,[],sentence,{lang:'es'});
  });

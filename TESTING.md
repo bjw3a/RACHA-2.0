@@ -1,3 +1,7 @@
+# Current release: Phase 4.6
+
+Run `cd tests && npm ci && npm test`, then `npx playwright install chromium` and `npm run test:browser`. See PHASE-4.6.md for the current pass/manual checklist. The notes below describe earlier releases.
+
 # Current release: Phase 4.5
 
 In `tests`, run `npm ci` and `npm test`. For Chromium, run `npx playwright install chromium`

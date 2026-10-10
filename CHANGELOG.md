@@ -1,3 +1,7 @@
+# Phase 4.6
+
+Beginner transcription, shared grading regression coverage, recognition-before-listening order, review-last topics, stable saved progress, cleaner results, gradual Spanish feedback, and recording playback fallback. See PHASE-4.6.md for the audit, QA, and deployment instructions.
+
 # Phase 4.5 — Interleaved Listening and Speaking (October 8, 2026)
 
 - Based on the exact `Racha-2.0-Phase-4.4(2).zip`; no repository changes or new repository.

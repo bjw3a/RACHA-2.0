@@ -28,3 +28,11 @@ export function contentTopics(course, selection) {
   if (!units[course].some(u=>u.topics.includes(selection))) throw new Error(`Unknown topic for Spanish ${course}: ${selection}`);
   return [selection];
 }
+
+// Display order only; saved topic/review IDs never change.
+export const orderedTopics = unit => [...unit.topics,reviewId(unit)];
+export function continueLabel(course,selection){
+ const index=units[course].findIndex(u=>reviewId(u)===selection||u.topics.includes(selection));
+ return index>=2?'Continuar':'Continue';
+}
+export const introductoryTopic = (course,topic) => course===1 && units[1].slice(0,3).some(u=>u.topics.includes(topic));
