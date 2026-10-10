@@ -21,7 +21,7 @@ for(const course of [1,2])for(const unit of units[course]){
 }
 const p=fresh(),unit=units[1][4];p.xp=730;p.bests={'1:days:quick':90};p.achievements=['first'];p.lastTopic={course:2,topic:'ar'};
 p.lastTopics={1:{course:1,topic:'days'},2:{course:2,topic:'ar'}};
-p.mastery['1:pronouns']=completed();p.mastery['1:ser']=completed();p.mastery['1:ser'].story.completed=false;
+p.mastery['1:unit:s1-u5']=completed();p.mastery['1:pronouns']=completed();p.mastery['1:ser']=completed();p.mastery['1:ser'].story.completed=false;
 localStorage.setItem('racha-progress-v1',JSON.stringify(p));await import('../js/app.js');
 for(const c of [1,2]){
  click('.brand');click(`[data-course="${c}"]`);assert.equal(document.querySelectorAll('[data-course]').length,0);assert.equal(document.querySelectorAll('[data-unit]').length,units[c].length);assert([...document.querySelectorAll('[data-unit]')].every(b=>b.dataset.unit.startsWith(`s${c}-`)));assert(!$('.unit-meta'));assert(!$('.study-navigation'));
@@ -41,4 +41,4 @@ const container=$('#main');container.innerHTML=configured.unitCompletionView(sav
 // Old data with no timestamps is not assigned a fabricated completion date.
 for(const t of unit.topics){delete saved.completionDates[`1:${t}`];for(const m of sequence)delete saved.mastery[`1:${t}`][m].completedAt;}
 assert(unitReport(saved,1,unit,'Ana').includes('Previously completed — date unavailable'));
-await new Promise(r=>setTimeout(r,3600));dom.window.close();console.log('PASS: all 12 units require every topic/activity; optional mixed review cannot unlock reports; course-specific resume; final activity unlocks unit report; actual scores/dates; names saved/changed; mailto encoding and configured click; clipboard and fallback; existing progress and optional submission.');
+await new Promise(r=>setTimeout(r,3600));dom.window.close();console.log('PASS: all 12 units require every topic/activity; mixed review alone cannot unlock reports; course-specific resume; final activity unlocks unit report; actual scores/dates; names saved/changed; mailto encoding and configured click; clipboard and fallback; existing progress and optional submission.');

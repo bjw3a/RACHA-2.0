@@ -1,28 +1,11 @@
-# Racha 2.0 — Phase 4.6
+# Racha 2.0 — Phase 4.6.1
 
-Complete static application, upgraded incrementally from `Racha-2.0-Phase-4.5(2).zip`.
-See **PHASE-4.6.md** for changes, migration, validation, and limitations.
+A static Spanish practice app with eight sequential activities, 80% scored mastery, local progress, arcade rewards and speaking participation.
 
-Each existing topic has eight interleaved activities: Match-Up, Recognition, Typing, Listen & Choose,
-Listen & Type, Read & Record, In Context, and Story Challenge. Listening uses 80% mastery;
-speaking uses explicit practice completion without a pronunciation score.
-Existing same-browser mastery, XP, achievements, and teacher email configuration are preserved.
+Open through a local web server or deploy the root files to the existing bjw3a/RACHA-2.0 repository. No build, runtime package install, backend or account system is needed. Microphone access requires HTTPS or localhost.
 
-## Upload
+- [Release notes, listening changes, speech limitations and deployment](PHASE-4.6.1.md)
+- [Testing report and remaining Chromebook checks](TESTING.md)
+- [Changelog](CHANGELOG.md)
 
-Extract the ZIP and upload its contents to the existing `bjw3a/RACHA-2.0` repository root.
-Keep `index.html` at the repository root alongside `js` and `styles.css`.
-Replace the existing files, including every changed JavaScript file. Do not nest the application
-inside another folder. This ZIP has not been deployed for you.
-
-Keep the existing website address to retain access to students' browser-stored progress.
-Progress does not transfer automatically to a different browser or hosting origin.
-The configured address in `js/config.js` is preserved; no reconfiguration is needed.
-
-## Tests
-
-In `tests`, run `npm ci`, then `npm test`.
-For browser checks, run `npx playwright install chromium` and `npm run test:browser`.
-Optionally set `RACHA_CHROMIUM` to a Chromium executable and `RACHA_QA_DIR` for screenshots.
-Development dependencies and tests are not needed to run the static application.
-Historical phase tests and documentation are retained; the package scripts select the current Phase 4.6 gates.
+The supplied teacher email is preserved in js/config.js. Student progress stays in the same browser and origin. Do not clear site data when updating. Final Mixed Review is required for the unit completion form; all existing topic mastery stays saved.

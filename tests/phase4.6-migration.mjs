@@ -40,7 +40,7 @@ for(const course of [1,2]){
   assert.equal(levelState(p,course,topic).next,i);const g=game(course,topic,m);assert(reward(p,g).mastery.passed);assert.equal(levelState(p,course,topic).complete,i===7);save(p);assert.deepEqual(load(),p);
   if(m==='record'){assert.equal(p.mastery[`${course}:${topic}`][m].best,null);assert(!p.completionDates[`${course}:${topic}`]);}
  }
- const unit=units[course].find(u=>u.topics.includes(topic));assert(unitComplete(p,course,unit));const report=unitReport(p,course,unit,'Ana');const ordered=['Match-Up:','Recognition:','Typing:','Listen & Choose:','Listen & Type:','Read & Record:','In Context:','Story Challenge:'];for(let i=1;i<ordered.length;i++)assert(report.indexOf(ordered[i])>report.indexOf(ordered[i-1]));assert(report.includes('Read & Record: Completed (practice; no pronunciation grade)'));
+ const unit=units[course].find(u=>u.topics.includes(topic));assert(!unitComplete(p,course,unit));for(const m of sequence)reward(p,game(course,`unit:${unit.id}`,m));assert(unitComplete(p,course,unit));const report=unitReport(p,course,unit,'Ana');const ordered=['Match-Up:','Recognition:','Typing:','Listen & Choose:','Listen & Type:','Read & Record:','In Context:','Story Challenge:'];for(let i=1;i<ordered.length;i++)assert(report.indexOf(ordered[i])>report.indexOf(ordered[i-1]));assert(report.includes('Read & Record: Completed (practice; no pronunciation grade)'));
 }
 assert(!assess({...game(1,'family','record'),practiced:9}).passed);
 console.log('PASS: Phase 4.6 order, migration A–E in both courses, all 256 mastery combinations, stable IDs/full-profile preservation, idempotence, earliest-missing progression, replay access, no duplicate XP/badges, score thresholds, speaking at 6, story at 8, reload and ordered reports.');

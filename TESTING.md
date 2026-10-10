@@ -1,51 +1,25 @@
-# Current release: Phase 4.6
+# Phase 4.6.1 testing report
 
-Run `cd tests && npm ci && npm test`, then `npx playwright install chromium` and `npm run test:browser`. See PHASE-4.6.md for the current pass/manual checklist. The notes below describe earlier releases.
+## Passed
+- Full npm test suite: curriculum and generation, 80% thresholds, all 256 activity-mastery combinations, legacy saved progress, XP/badges/replay, forgiving answers, meaningful negation/ñ/grammar rejection, 6,048 time-answer variants, full eight-activity DOM journeys in both courses, completion reports, clipboard fallback, teacher mailto encoding and simulated click.
+- 20 randomized sessions per selection/mode: ten-item sessions, topic containment, unique choices, accepted answers, deliberate repetition in short banks.
+- Integrated audio DOM tests: 20 sessions across both courses; record/play/re-record gates, denied/missing microphone, missing voice, sound toggle, cleanup, summaries and replay XP.
+- New content tests: 45 introductory clips <=10 words, exact answer keys, Mixed Review bank containment, final-review completion gates and report coverage in all 12 units.
+- Chromium 153: actual rendered order in every Spanish 1/2 unit; Next Topic opens Introductions, then Mixed Review; review completion exposes unit email; XP remains unchanged by navigation.
+- Chromium: all eight activities in both themes at 1366×768 and 390×844; no horizontal overflow; full question/control area fits Chromebook viewport for the seven shorter activity types. Story deliberately permits scrolling. Screenshots inspected for listening and recording.
+- Existing Chromium audio journey: 70% fail/80% pass and unlocks; actual MediaRecorder and playback with synthetic microphone; ten prompts; denied-mic fallback; reload; copy summaries; sound replay; stream cleanup; 320/390/768/1366 widths; both themes; 48px audio touch targets. Browser speech synthesis is stubbed in this test.
+- No browser JavaScript errors in either browser suite.
 
-# Current release: Phase 4.5
+## Changes to older tests
+Tests now require final Mixed Review before unit completion and expect Replay Topic/Back to Topics navigation. A pre-existing randomized word-bank assertion was made case-insensitive to match the existing grading and deduplication behavior; no grading code was changed.
 
-In `tests`, run `npm ci` and `npm test`. For Chromium, run `npx playwright install chromium`
-and `npm run test:browser`. Current scripts select ten regression suites and the Phase 4.5 browser suite.
+## Remaining manual checks
+- A real district Chromebook microphone, audible model Spanish, student recording, playback and Record Again. Synthetic-mic tests do not establish microphone quality, real speech, classroom noise or district permissions.
+- Actual email app opening and sending the completion draft to Mr. Walsh; automated tests inspect the encoded draft but send no email.
+- District network access to the existing GitHub Pages URL and a hard refresh after deployment.
+- Teacher review of clip difficulty with students, particularly contextual time/month/subject questions. Recognition and pronunciation scoring are intentionally absent.
 
-The exact Phase 4.4 source's ten regression suites were run successfully before upgrading.
-Order-dependent tests have Phase 4.5 replacements; older phase tests/documentation remain below
-and in the archive as historical references. See PHASE-4.5.md for migration cases and limitations.
+## Reproduce
+From tests/: npm ci, then npm test. Install Playwright Chromium and run npm run test:browser. An installed Chromium can be selected with RACHA_CHROMIUM=/absolute/path/to/chromium. Test dependencies are not runtime dependencies and are not included in the ZIP. Browser screenshots are written to /tmp by default.
 
----
-
-# Current release: Phase 4.4
-
-Run `cd tests`, `npm ci`, `npm test`, then `npx playwright install chromium` and `npm run test:browser`.
-The current scripts select Phase 4.4 regression gates and unchanged content/audio checks.
-See PHASE-4.4.md for tested cases and physical-device limitations.
-Historical instructions below document earlier releases; old optional-menu/five-level/Flashcards
-UI assertions are superseded by the Phase 4.4 suites.
-
----
-
-# Phase 4.2.2 validation
-
-See PHASE-4.2.2.md for current coverage and the school-device email limitation. The historical results below describe earlier releases.
-
-# Phase 4.2.1 validation — September 28, 2026
-
-Passed:
-
-- `node tests/phase4.2.1.mjs`: 1,000 balanced 30-card samples; every unit represented; no within-session duplicates; varied selections; full 465/406 pools intact; greeting correction; results labels; missed-only rounds; full topic/unit START OVER after repeated missed rounds; cumulative NEW REVIEW after missed rounds; exact saved-profile isolation.
-- Phase 4.2 browser suite extended to check cumulative 30-card results, missed subsets, NEW 30-CARD REVIEW, topic START OVER after a missed round, and longer results buttons fitting phone viewports.
-
-- `node tests/phase4.mjs`: all existing topics/unit reviews, five-step mastery, 80% boundary, saved progress, completion dates, normalization, distractors, and Latin American forms.
-- `node tests/phase4-dom.mjs`: complete learning progression through matching, recognition, typing, In Context, and Story; failure/retry thresholds; completion copy fallback; resume; all topics/courses; saved records.
-- `node tests/phase4.1.mjs`: both courses' word-bank placement, noninteractive chips, deduplication, all-topic answer coverage, typed correct/incorrect answers, unchanged saved profile.
-- `node tests/phase4.2.mjs`: all flashcard topics/unit/course decks, deterministic counts, deduplication, no vosotros/vosotras, representative conjugations/agreement, 0–100, time, new-card extension, reveal, Know it/Again, shuffle, subset rounds, all-known/all-again summaries, clean course home, Continue Learning, exact saved-profile isolation.
-- `node tests/browser.mjs`: real Chromium at 320×568, 390×844, 768×1024, 1366×768; original progression screens, primary button placement, matching → next level, refresh persistence, questions, course isolation, light theme, relative subpath assets, no browser/resource errors.
-- `node tests/phase4.1-browser.mjs`: both courses, phone/laptop layouts, light/dark, word-bank placement, no overflow, typing correct/incorrect responses, refresh persistence.
-- `node tests/phase4.2-browser.mjs`: both courses and themes at all four viewport sizes; keyboard reveal, touch targets, primary controls above fold, all card text fitting, topic/unit/course selection, shuffle, missed-card rounds, local progress isolation, refresh, relative `/racha/` deployment paths, no browser/resource errors.
-- Visual screenshot review of phone and laptop screens.
-- Historical Phase 4.2 comparison: `engine.js`, `progression.js`, `storage.js`, and `curriculum.js` unchanged byte-for-byte. `data.js` changes only export visibility for `matchBank`. Readings differ only in quotation marks.
-
-Run the complete suites from `tests/` with `npm ci`, `npm test`, and `npm run test:browser` (install Chromium with `npx playwright install chromium` first). Browser tests support optional `RACHA_SCREENSHOTS=/absolute/path` for screenshots.
-
-These are automated DOM and Chromium tests with viewport emulation, not physical-device, Safari, Firefox, or live GitHub deployment tests. Flashcard round state intentionally resets on refresh; saved Learn progress remains intact.
-
-Phase 4.2.1 archive comparison: CSS, app navigation, shared data, curriculum, readings, game engine, progression, and storage are byte-for-byte identical to the exact Phase 4.2 source ZIP.
+No live site was changed.

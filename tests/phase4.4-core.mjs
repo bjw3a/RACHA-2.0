@@ -8,7 +8,7 @@ let value=null;globalThis.localStorage={getItem:()=>value,setItem:(_,v)=>value=v
 for(const course of [1,2])for(const topic of [...Object.keys(topics[course]),...units[course].map(reviewId)]){
  for(let i=0;i<100;i++){const q=generate(course,topic);assert(!/vosotr|sois|estudiáis|undefined/.test(JSON.stringify(q)));assert(isCorrect(q.answers[0],q));assert.equal(options(q).filter(v=>isCorrect(v,q)).length,1);}
  assert.equal(matchPairs(course,topic).length,6);
- const a=application(course,topic);assert.equal(a.questions.length,5);for(const q of a.questions){assert(q.prompt.includes('___'));assert(a.text.includes(q.answers[0]));assert(isCorrect(q.answers[0],q));}
+ const a=application(course,topic);assert.equal(a.questions.length,5);for(const q of a.questions){assert(q.prompt.includes('___'));assert(normalize(a.text).includes(normalize(q.answers[0])));assert(isCorrect(q.answers[0],q));}
 }
 for(const v of ['¿De dónde eres?','De dónde eres?','de dónde eres','De donde eres','De dónde eres'])assert(isCorrect(v,{answers:['¿De dónde eres?']}));
 assert(isCorrect('where are you from',{answers:['Where are you from?']}));assert(!isCorrect('soy',{answers:['es']}));assert.notEqual(normalize('año'),normalize('ano'));

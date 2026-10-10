@@ -1,3 +1,4 @@
+import {positionQuestion} from './viewport.js';
 import {continueLabel} from './curriculum.js';
 import {sequence} from './progression.js';
 import {createPracticeSession,dictationCorrect} from './practice-sessions.js';
@@ -6,7 +7,7 @@ const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'
 export const practiceIcon=name=>`<svg class="practice-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">${({headphones:'<path d="M4 14v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="12" width="4" height="8" rx="2"/><rect x="17" y="12" width="4" height="8" rx="2"/>',speaker:'<path d="M4 9h4l5-4v14l-5-4H4zM17 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/>',mic:'<rect x="9" y="2" width="6" height="13" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8"/>',stop:'<rect x="5" y="5" width="14" height="14" rx="1"/>',play:'<path d="m7 4 14 8-14 8z"/>'})[name]||''}</svg>`;
 const activities={choose:['Listen & Choose','Listen to Spanish. Choose the answer.','headphones'],type:['Listen & Type','Listen. Type what you hear in Spanish.','speaker'],record:['Read & Record','Read the Spanish aloud and hear yourself.','mic']};
 // One integrated level per session. The topic path is the only activity menu.
-export function openPractice(main,{course,topic,label,mode,enabled,back,complete,topicComplete,next,canAdvance}) {
+export function openPractice(main,{course,topic,label,mode,enabled,back,complete,topicComplete,next,canAdvance,nextTopic,hasNextTopic}) {
  if(!activities[mode])throw new Error('Unknown audio level');
  let items=[],index=0,disposed=false,selected=null,answered=false,firstCorrect=0,result=null;
  let heard=false,played=false,micUnavailable=false,speechUnavailable=false,confirmed=false,practiced=0;
@@ -32,7 +33,7 @@ export function openPractice(main,{course,topic,label,mode,enabled,back,complete
    if(s==='recording'){micUnavailable=false;}
    $('#record').disabled=busy;$('#record').innerHTML=practiceIcon('mic')+(s==='ready'?' Record Again':' Record Yourself');
    $('#stop-recording').hidden=!['recording','stopping'].includes(s);$('#stop-recording').disabled=s!=='recording';
-   $('#play-recording').hidden=s!=='ready';$('#hear-again').hidden=s!=='ready';
+   $('#play-recording').hidden=s!=='ready';
    main.querySelectorAll('[data-listen]').forEach(b=>b.disabled=busy);
    $('#record-indicator').hidden=s!=='recording';sync();
   }
@@ -41,7 +42,7 @@ export function openPractice(main,{course,topic,label,mode,enabled,back,complete
  function shell(title,body){
   audio.dispose();
   main.innerHTML=`<section class="game-shell practice-shell"><div class="game-top"><div><span class="eyebrow">SPANISH ${course} · LEVEL ${sequence.indexOf(mode)+1}</span><h2 id="practice-title" tabindex="-1">${esc(title)}</h2><p>${esc(label)}</p></div><button id="practice-back" class="quiet">← Back to Topic</button></div>${body}</section>`;
-  $('#practice-back').onclick=back;$('#practice-title').focus({preventScroll:true});window.scrollTo({top:0,behavior:'instant'});
+  $('#practice-back').onclick=back;$('#practice-title').focus({preventScroll:true});positionQuestion(main.querySelector('.question'));
  }
  function start(){items=createPracticeSession(course,topic,mode);index=0;firstCorrect=0;practiced=0;result=null;render();}
  function render(){
@@ -59,7 +60,6 @@ export function openPractice(main,{course,topic,label,mode,enabled,back,complete
      <button id="record">${practiceIcon('mic')} Record Yourself</button>
      <button id="stop-recording" hidden>${practiceIcon('stop')} Stop</button>
      <button id="play-recording" hidden>${practiceIcon('play')} Play My Recording</button>
-     <button id="hear-again" data-listen hidden>${practiceIcon('speaker')} Hear Spanish Again</button>
     </div><p id="record-indicator" hidden>● Recording…</p>
     <p class="hint">Make and play back a recording before continuing. Private and temporary. No pronunciation grade.</p>
     <div id="practice-fallback" hidden><p id="fallback-instruction"></p><label><input type="checkbox" id="confirm-practice" disabled> I practiced this prompt aloud.</label></div>
@@ -95,7 +95,7 @@ export function openPractice(main,{course,topic,label,mode,enabled,back,complete
    $('#practice-feedback').textContent=correct?'✓ ¡Correcto!':`Not quite. Correct answer: ${mode==='choose'?item.answer:item.text}`;
    $('#practice-check').disabled=true;main.querySelectorAll('[data-answer],#dictation,[data-letter]').forEach(b=>b.disabled=true);
    $('#practice-transcript').textContent=`You heard: “${item.text}”`;$('#practice-transcript').hidden=false;
-   $('#practice-next').hidden=false;$('#practice-next').focus({preventScroll:true});
+   $('#practice-next').hidden=false;$('#practice-next').focus({preventScroll:true});positionQuestion($('#practice-next'));
   };
   if(mode==='choose')$('#practice-check').onclick=check;
   if(mode==='type'){
@@ -117,8 +117,8 @@ export function openPractice(main,{course,topic,label,mode,enabled,back,complete
    <section class="question practice-finished"><h3>${esc(activities[mode][0])}</h3>
    ${mode==='record'?`<p>${practiced} / ${items.length} prompts practiced.</p><p>Speaking practice completed. No pronunciation grade.</p>`:`<p>${firstCorrect} / ${items.length} correct · ${Math.floor(firstCorrect/items.length*100)}%</p><p>${passed?'Ready for your next level!':'Reach 80% to unlock the next level. Try a fresh round.'}</p>`}
    ${!result.saved?'<p>Progress could not be saved in this browser. Keep this page open and try again.</p>':''}
-   <div class="practice-finish-actions">${canAdvance?.()?'<button id="practice-next-level" class="primary">NEXT LEVEL →</button>':''}<button id="finish-topic">${topicComplete()?'TOPIC COMPLETE ✓':'View Levels'}</button><button id="practice-again">${passed?'REPLAY':'TRY AGAIN'}</button></div></section>`);
-  $('#practice-next-level')?.addEventListener('click',next);$('#practice-again').onclick=start;$('#finish-topic').onclick=back;($('#practice-next-level')||$('#practice-again')).focus({preventScroll:true});
+   <div class="practice-finish-actions">${topicComplete()&&hasNextTopic?.()?'<button id="practice-next-topic" class="primary">NEXT TOPIC →</button>':''}${canAdvance?.()?'<button id="practice-next-level" class="primary">NEXT LEVEL →</button>':''}<button id="finish-topic">${topicComplete()?'TOPIC COMPLETE ✓':'View Levels'}</button><button id="practice-again">${passed?'REPLAY':'TRY AGAIN'}</button></div></section>`);
+  $('#practice-next-topic')?.addEventListener('click',nextTopic);$('#practice-next-level')?.addEventListener('click',next);$('#practice-again').onclick=start;$('#finish-topic').onclick=back;($('#practice-next-topic')||$('#practice-next-level')||$('#practice-again')).focus({preventScroll:true});
  }
  const hide=()=>audio.dispose();window.addEventListener('pagehide',hide);
  const visibility=()=>{if(document.hidden)hide();};document.addEventListener('visibilitychange',visibility);start();

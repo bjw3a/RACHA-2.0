@@ -1,3 +1,4 @@
+import {orderedTopics,reviewId} from './curriculum.js';
 import {TEACHER_EMAIL} from './config.js';
 import {topics} from './data.js';
 import {modes} from './engine.js';
@@ -7,13 +8,14 @@ const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'
 const cleanName=s=>String(s).replace(/[\r\n\t]/g,' ').trim().slice(0,100);
 function savedName(){try{return cleanName(localStorage.getItem(NAME_KEY)||'');}catch{return '';}}
 // A unit is complete only when every listed topic has all eight activities mastered.
-// Mixed review remains an optional, separate practice path; it cannot substitute for topics.
+// Mixed Review follows the individual topics and is required for unit completion.
+// Existing per-topic records are preserved; older students only finish missing review.
 export function unitComplete(profile,course,unit){
- return !!unit?.topics.length && unit.topics.every(t=>levelState(profile,course,t).complete);
+ return !!unit?.topics.length && orderedTopics(unit).every(t=>levelState(profile,course,t).complete);
 }
 export function unitReport(profile,course,unit,name){
  if(!unitComplete(profile,course,unit))return null;
- const dates=unit.topics.map(t=>{
+ const dates=orderedTopics(unit).map(t=>{
   const topicDate=profile.completionDates?.[`${course}:${t}`];
   if(topicDate&&Number.isFinite(Date.parse(topicDate)))return Date.parse(topicDate);
   const levels=levelState(profile,course,t).levels;
@@ -21,7 +23,7 @@ export function unitReport(profile,course,unit,name){
   return values.every(Number.isFinite)?Math.max(...values):NaN;
  });
  const completionDate=dates.every(Number.isFinite)?new Date(Math.max(...dates)).toLocaleString():'Previously completed — date unavailable';
- return ['RACHA UNIT COMPLETION','',`Student: ${cleanName(name)}`,`Course: Spanish ${course}`,`Unit: ${unit.name}`,'Status: Unit Complete','','Topics Mastered:',...unit.topics.map(t=>`✓ ${topics[course][t]}`),'','Unit Performance (best mastery):',...unit.topics.flatMap(t=>[topics[course][t],...sequence.map(m=>`  ${modes.find(mode=>mode.id===m).name}: ${m==='record'?'Completed (practice; no pronunciation grade)':percentText(levelState(profile,course,t).levels[m].best)}`)]),'',`Completion Date: ${completionDate}`,'','Results are saved in this browser; not teacher-verified.'].join('\n');
+ return ['RACHA UNIT COMPLETION','',`Student: ${cleanName(name)}`,`Course: Spanish ${course}`,`Unit: ${unit.name}`,'Status: Unit Complete','','Topics Mastered:',...orderedTopics(unit).map(t=>`✓ ${t===reviewId(unit)?'Mixed Review':topics[course][t]}`),'','Unit Performance (best mastery):',...orderedTopics(unit).flatMap(t=>[t===reviewId(unit)?'Mixed Review':topics[course][t],...sequence.map(m=>`  ${modes.find(mode=>mode.id===m).name}: ${m==='record'?'Completed (practice; no pronunciation grade)':percentText(levelState(profile,course,t).levels[m].best)}`)]),'',`Completion Date: ${completionDate}`,'','Results are saved in this browser; not teacher-verified.'].join('\n');
 }
 export function completionMailto(email,course,unit,name,report){
  const subject=`RACHA COMPLETION | Spanish ${course} | ${unit.name} | ${cleanName(name)}`;

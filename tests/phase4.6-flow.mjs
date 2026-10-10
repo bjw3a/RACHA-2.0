@@ -37,13 +37,13 @@ for(const [c,t] of [[1,'days'],[2,'er']]){
   if(['choose','type','record'].includes(m)){click('#finish-topic');assert.equal($('#play-level').dataset.mode,sequence[i+1]);assert($('.next-activity .eyebrow').textContent.includes(`LEVEL ${i+2}`));click('#play-level');}
   else if(i<7)click('#next-level');
  }
- assert($('.completion'));assert(saved().completionDates[`${c}:${t}`]);assert.equal($('#games').textContent,'TOPIC COMPLETE ✓');assert(!$('#next-level'));click('#games');assert.equal($('#play-level').dataset.mode,'story');assert($('#play-level').textContent.includes('REPLAY STORY'));assert($('.level-line').textContent.includes('8 / 8'));clock.uninstall();dom.window.close();
+ assert($('.completion'));assert(saved().completionDates[`${c}:${t}`]);assert.equal($('#games').textContent,'Back to Topics');assert(!$('#next-level'));click('#games');click(`[data-topic="${t}"]`);assert.equal($('#play-level').dataset.mode,'match');assert($('#play-level').textContent.includes('Replay Topic'));assert($('.level-line').textContent.includes('8 / 8'));clock.uninstall();dom.window.close();
 }
 // Migrated mastery is visible and replayable even when a newly earlier prerequisite is missing.
 for(const [label,ids] of [['B',['match','quick']],['C',['match','quick','lives','streak','story']],['D',sequence],['E',['match','choose']]]){
  const p=fresh();p.xp=700;p.achievements=['first'];p.mastery['1:family']=Object.fromEntries(ids.map(m=>[m,{completed:true,best:m==='record'?null:100,completedAt:'2026-10-08T10:00:00Z'}]));if(label==='D')p.completionDates['1:family']='2026-10-08T10:00:00Z';
  const dom=setup(p),clock=FakeTimers.install({now:1791464400000});await import(`../js/app.js?migration=${label}`);enter(1,'family');assert.equal(saved().xp,700);assert.equal(document.querySelectorAll('.level-map .mastered').length,ids.length);
- assert.equal($('#play-level').dataset.mode,label==='D'?'story':label==='E'?'quick':label==='B'?'lives':'choose');
+ assert.equal($('#play-level').dataset.mode,label==='D'?'match':label==='E'?'quick':label==='B'?'lives':'choose');
  if(label==='B'){click('.level-map [data-mode="quick"]');assert.equal($('.game-top h2').textContent,'Recognition');click('#leave');click('#play-level');originals(1,'family','lives');click('#next-level');audio(1,'family','choose');click('#finish-topic');assert.equal($('#play-level').dataset.mode,'type');assert($('.next-activity .eyebrow').textContent.includes('LEVEL 5'));}
  if(label==='C'){
   click('.level-map [data-mode="story"]');originals(1,'family','story');assert(!$('.completion'));assert(!$('.mastery-result').textContent.includes('All eight'));assert.equal($('#games').textContent,'View levels');click('#next-level');assert($('.eyebrow').textContent.includes('LEVEL 4'));

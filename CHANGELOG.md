@@ -1,3 +1,17 @@
+# Phase 4.6.1 — 2026-10-10
+
+- Verified Mixed Review last in all 12 rendered unit lists; preserved the latest ZIP's existing topic IDs and order helper.
+- Added prominent Next Topic on completed paths and results, including audio results for older saved progress. It opens the first unfinished topic in displayed order at its next unlocked activity. Completed topics are skipped; legacy gaps remain playable.
+- Mixed Review now completes the unit path; unit reports include review performance. Existing mastery, XP, achievements and dates remain intact. Older unit badges/reports wait for unfinished review.
+- Added conditional question positioning and compact spacing, keeping readable type and touch targets. Long stories and small screens retain scrolling.
+- Replaced full-passage introductory listening with 45 question-specific clips across Spanish 1 Units 1–3. Existing short dictation/speaking vocabulary retained; longer stories and later listening retained.
+- Removed duplicate Hear Spanish Again; Hear Spanish remains reusable, alongside Record Again and Play My Recording.
+- Kept speech recognition disabled after privacy/compatibility review. Recording/playback measures participation only.
+- Preserved teacher email, local progress keys, 80% mastery, eight activities, sounds, themes and forgiving validation.
+- Updated regression tests for required final review, Replay Topic, and Back to Topics; added content and real-browser layout/navigation checks.
+
+---
+
 # Phase 4.6
 
 Beginner transcription, shared grading regression coverage, recognition-before-listening order, review-last topics, stable saved progress, cleaner results, gradual Spanish feedback, and recording playback fallback. See PHASE-4.6.md for the audit, QA, and deployment instructions.
