@@ -1,3 +1,11 @@
+# Phase 4.7.1 — October 19, 2026
+
+Removed school email and email-draft reporting; added validated user-controlled backup/merge; preserved historical Level 7 credit with separate Choose English evidence and optional replay; spaced repeated listening clips. 17 automated suites pass; rendered/mobile hardware QA remains pending due blocked Chromium launch. No deployment or Phase 4.8 changes. See current report/checklist.
+
+# Phase 4.7 — October 19, 2026
+
+Mobile safe areas and touch layouts; VisualViewport keyboard support; consistent unfinished-round guards; in-activity sound control and clearer microphone states; requested eight-activity sequence; taught-only early listening with ten questions; Choose English at level 7 and Mixed Review at level 8 with stable storage IDs. See the Phase 4.7 development report for migration details, 15 passing automated suites, and blocked rendered/device QA. No deployment.
+
 # Phase 4.6.1 — 2026-10-10
 
 - Verified Mixed Review last in all 12 rendered unit lists; preserved the latest ZIP's existing topic IDs and order helper.

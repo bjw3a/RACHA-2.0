@@ -1,5 +1,5 @@
 // Mastery is independent of arcade points, XP and personal records.
-export const sequence = ['match','quick','lives','choose','type','record','streak','story'];
+export const sequence = ['match','choose','quick','type','lives','record','streak','story'];
 export const minimum = mode => mode === 'match' ? 6 : ['story','streak'].includes(mode) ? 5 : 10;
 export const progressKey = (course, topic) => `${course}:${topic}`;
 export function levelState(profile, course, topic) {
@@ -37,6 +37,14 @@ export function recordMastery(profile, g) {
   const previous = levels[g.mode] || {completed:false,best:0};
   levels[g.mode] = {completed:previous.completed || result.passed,
     completedAt:previous.completedAt || (result.passed ? new Date().toISOString() : null),
+    ...(g.mode==='streak'?{...(previous.englishChoicePassed||result.passed?{englishChoicePassed:true}:{}),...(result.enough?{englishChoiceBest:Math.max(previous.englishChoiceBest||0,result.percent)}:previous.englishChoiceBest!==undefined?{englishChoiceBest:previous.englishChoiceBest}:{})}:{}),
     best:result.completionBased ? null : result.enough ? Math.max(previous.best, result.percent) : previous.best};
   return result;
+}
+
+// Historical Level 7 best stays in storage; current-format evidence is separate.
+export function masteryLabel(mode,value){
+ if(mode!=='streak')return percentText(value.best);
+ if(Number.isFinite(value.englishChoiceBest))return `${percentText(value.englishChoiceBest)} in Choose English${!value.englishChoicePassed&&value.completed?' · earlier credit retained':''}`;
+ return value.completed?'Retained Level 7 credit (earlier format may apply)':percentText(value.best);
 }

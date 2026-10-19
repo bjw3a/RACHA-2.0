@@ -2,8 +2,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "node phase4.4-core.mjs && node phase4.6-context.mjs && node phase4.2.4.mjs && node phase4.2.4-navigation.mjs && node phase4.3.mjs && node phase4.6-sessions.mjs && node phase4.6-migration.mjs && node phase4.6-flow.mjs && node phase4.6-audio-dom.mjs && node phase4.4-completion.mjs && node phase4.6-validation.mjs && node phase4.6-ui.mjs && node phase4.6.1-content.mjs",
-    "test:browser": "node phase4.6-browser.mjs && node phase4.6.1-browser.mjs"
+    "test": "node phase4.4-core.mjs && node phase4.7-content.mjs && node phase4.2.4.mjs && node phase4.2.4-navigation.mjs && node phase4.3.mjs && node phase4.6-sessions.mjs && node phase4.7-migration.mjs && node phase4.7-flow.mjs && node phase4.7-audio-dom.mjs && node phase4.7.1-completion.mjs && node phase4.6-validation.mjs && node phase4.7-ui.mjs && node phase4.6.1-content.mjs && node phase4.7-viewport.mjs && node phase4.7-leave.mjs && node phase4.7.1-backup.mjs && node phase4.7.1-stabilization.mjs",
+    "test:browser": "node phase4.7.1-browser.mjs",
+    "test:legacy": "node phase4.4-core.mjs && node phase4.6-context.mjs && node phase4.2.4.mjs && node phase4.2.4-navigation.mjs && node phase4.3.mjs && node phase4.6-sessions.mjs && node phase4.6-migration.mjs && node phase4.6-flow.mjs && node phase4.6-audio-dom.mjs && node phase4.4-completion.mjs && node phase4.6-validation.mjs && node phase4.6-ui.mjs && node phase4.6.1-content.mjs"
   },
   "devDependencies": {
     "@sinonjs/fake-timers": "15.4.0",

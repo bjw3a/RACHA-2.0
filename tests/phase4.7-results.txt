@@ -1,0 +1,20 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> test
+> node phase4.4-core.mjs && node phase4.7-content.mjs && node phase4.2.4.mjs && node phase4.2.4-navigation.mjs && node phase4.3.mjs && node phase4.6-sessions.mjs && node phase4.7-migration.mjs && node phase4.7-flow.mjs && node phase4.7-audio-dom.mjs && node phase4.4-completion.mjs && node phase4.6-validation.mjs && node phase4.7-ui.mjs && node phase4.6.1-content.mjs && node phase4.7-viewport.mjs && node phase4.7-leave.mjs
+
+PASS: all topics and unit reviews, eight-step mastery, 80% boundary, saved progress, certificates dates, normalization, distractors and Latin American forms.
+PASS: exact requested eight activities, 3400 English-choice questions across both courses/all reviews, unique accepted choices, taught-only early listening, review-last unit order.
+PASS: 6048 time variants across all 720 hour/minute combinations, wrong times rejected, una agreement, both-course typing audit, numeric 43, accents and ñ.
+PASS: direct navigation, hidden Flashcards, exact completion indicators, unchanged storage during navigation, numeric instruction and submitted digits.
+PASS: all course/topic data, voice preference/fallback, sound off, rapid record clicks, recording/play/re-record cleanup, late permission cleanup, denied/missing microphone, missing recorder, missing speech/voice.
+PASS: all topics/units/course reviews; 20 randomized ten-item sessions per mode/selection; topic containment, choice uniqueness and synonyms, spaced repetition only for small dictation/record banks, accent/case/space/punctuation tolerance, ñ/grammar/negation rejection.
+PASS: Phase 4.7 order, migration A–E in both courses, all 256 mastery combinations, stable IDs/full-profile preservation, idempotence, earliest-missing progression, replay access, no duplicate XP/badges, score thresholds, speaking at 6, Mixed Review at 8, reload and ordered reports.
+PASS: complete fresh 1→8 DOM journeys in Spanish 1 and 2, exact Up Next/replay order, speaking at 6 does not complete topic, Mixed Review at 8 does, migrated B–E display/replay, skip mastered Recognition, replaying Story across gaps cannot claim completion, continuation targets earliest gap.
+PASS: 20 integrated sessions across family/greetings/time/adjectives/Spanish 2; failed then passed listening; audio progression with saved original levels; per-prompt recording/playback/re-record gates; denied/missing mic; sound off; missing voice; explicit fallback; private cleanup; summaries/copy/replay XP; both themes.
+PASS: all 12 units require every topic/activity; mixed review alone cannot unlock reports; course-specific resume; final activity unlocks unit report; actual scores/dates; names saved/changed; mailto encoding and configured click; clipboard and fallback; existing progress and optional submission.
+PASS: punctuation/case/Unicode/whitespace variants, explicit alternatives, strict accents opt-in, meaningful errors rejected; 1–5-word beginner sessions and taught vocabulary across Units 1–3; stable review-last IDs and gradual Continue labels.
+PASS: review-last DOM order in every unit, beginner reference, concise classic/audio results, personal best/streak, Spanish feedback, direct Next Level.
+PASS: 45 targeted clips, answer keys, <=10 words, unit-review containment, all 12 unit gates/reports, early speaking, later listening retained, forgiving positive/negative cases.
+PASS: simulated keyboard geometry, input/submit visibility, viewport offset, tiny viewport, resize, long content, detached screens. Not a rendered layout or device test.
+PASS: cancel/confirm leaving typing and audio, home guard, beforeunload only during unfinished rounds, existing XP retained.

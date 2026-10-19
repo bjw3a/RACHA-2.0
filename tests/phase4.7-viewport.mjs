@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import {JSDOM} from 'jsdom';
+const dom=new JSDOM('<form><input id="typed"><button type="submit">Check</button></form>',{pretendToBeVisual:true});
+globalThis.window=dom.window;globalThis.document=window.document;
+const {positionQuestion,installViewportSupport}=await import('../js/viewport.js');
+let last=null;window.scrollTo=({top})=>{last=top;};window.requestAnimationFrame=f=>f();
+const input=document.querySelector('input'),button=document.querySelector('button');
+const vv=new window.EventTarget();vv.height=350;vv.offsetTop=0;window.visualViewport=vv;
+input.getBoundingClientRect=()=>({top:260,bottom:312,height:52});button.getBoundingClientRect=()=>({top:380,bottom:432,height:52});
+input.focus();positionQuestion(input);assert.equal(last,94,'input and submit move into the visible keyboard area');
+vv.offsetTop=40;last=null;positionQuestion(input);assert.equal(last,54,'visual viewport offset respected');
+vv.height=150;last=null;positionQuestion(input);assert.equal(last,134,'tiny viewport prioritizes input');
+input.blur();vv.height=350;last=null;const long={isConnected:true,getBoundingClientRect:()=>({top:60,bottom:860,height:800})};positionQuestion(long);assert.equal(last,null,'long content at top is not repeatedly moved');
+last=null;positionQuestion({isConnected:false});assert.equal(last,null,'discarded screens do not scroll');
+installViewportSupport();input.focus();vv.height=350;vv.offsetTop=0;vv.dispatchEvent(new window.Event('resize'));await new Promise(r=>setTimeout(r,170));assert.equal(last,94);
+dom.window.close();console.log('PASS: simulated keyboard geometry, input/submit visibility, viewport offset, tiny viewport, resize, long content, detached screens. Not a rendered layout or device test.');

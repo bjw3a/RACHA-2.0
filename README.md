@@ -1,11 +1,21 @@
-# Racha 2.0 — Phase 4.6.1
+# Racha 2.0 — Phase 4.7.1
 
-A static Spanish practice app with eight sequential activities, 80% scored mastery, local progress, arcade rewards and speaking participation.
+Stabilization build: generic progress reports, safe progress backup/merge, transparent historical Level 7 credit, and spaced introductory listening. Approved design and eight-activity curriculum retained. No accounts, paid services, telemetry or runtime installation required.
 
-Open through a local web server or deploy the root files to the existing bjw3a/RACHA-2.0 repository. No build, runtime package install, backend or account system is needed. Microphone access requires HTTPS or localhost.
+Run from this folder:
 
-- [Release notes, listening changes, speech limitations and deployment](PHASE-4.6.1.md)
-- [Testing report and remaining Chromebook checks](TESTING.md)
-- [Changelog](CHANGELOG.md)
+```sh
+python3 -m http.server 8000
+```
 
-The supplied teacher email is preserved in js/config.js. Student progress stays in the same browser and origin. Do not clear site data when updating. Final Mixed Review is required for the unit completion form; all existing topic mastery stays saved.
+Open http://localhost:8000. Do not double-click index.html; ES modules require a server. Microphone access requires localhost or HTTPS; a plain HTTP LAN address on a phone is insufficient.
+
+- [Development report](Phase-4.7.1-Development-Report.md)
+- [Actual phone checklist](Phase-4.7.1-Mobile-Testing-Checklist.md)
+- [Automated tests](TESTING.md)
+
+Home → **Progress & backups** downloads/imports a Racha JSON backup. Imports are validated and require confirmation, merge completions without erasing existing credit, and take the higher cumulative totals instead of adding them. Names/recordings/unfinished rounds are excluded. Current device preferences stay in place.
+
+Progress remains at `racha-progress-v1` on the current browser origin. Back up before clearing site data or changing browsers/devices/hosts. Level 7 historical credit stays unlocked, with an optional current-format replay. Reports are generic, optional and manually copied; there is no configured teacher email.
+
+**17 automated suites pass. Rendered browser and actual-device testing remain pending.** This is not an app-store-ready release. Nothing was deployed or changed in the official repository. Earlier included reports describe earlier releases; this release's report is authoritative.

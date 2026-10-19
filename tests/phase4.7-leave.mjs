@@ -1,0 +1,16 @@
+import {JSDOM} from 'jsdom';import fs from 'node:fs';import assert from 'node:assert/strict';
+import {sequence} from '../js/progression.js';
+const dom=new JSDOM(fs.readFileSync(new URL('../index.html',import.meta.url),'utf8'),{url:'https://racha.test',pretendToBeVisual:true});
+const w=dom.window;for(const k of ['window','document','localStorage'])globalThis[k]=k==='window'?w:w[k];w.scrollTo=()=>{};
+Object.defineProperty(globalThis,'navigator',{value:{},configurable:true});
+let allow=false,calls=0;globalThis.confirm=()=>{calls++;return allow;};
+localStorage.setItem('racha-progress-v1',JSON.stringify({xp:123,mastery:{'1:greetings':Object.fromEntries(sequence.map(m=>[m,{completed:true,best:100}]))}}));
+await import('../js/app.js');const $=s=>document.querySelector(s);
+$('[data-course="1"]').click();$('[data-unit="s1-u1"]').click();$('[data-topic="greetings"]').click();$('[data-mode="type"]').click();
+assert(!$('#practice-enable-sound').hidden);$('#practice-enable-sound').click();assert($('#practice-enable-sound').hidden);assert.equal($('#sound').textContent,'Sound on');
+$('#dictation').value='hola';$('#practice-back').click();assert($('#dictation'));assert.equal($('#dictation').value,'hola');$('.brand').click();assert($('#dictation'));assert.equal(calls,2);
+const event=new w.Event('beforeunload',{cancelable:true});w.dispatchEvent(event);assert(event.defaultPrevented);
+allow=true;$('#practice-back').click();assert($('.path-shell'));assert.equal(JSON.parse(localStorage.getItem('racha-progress-v1')).xp,123);
+$('[data-mode="lives"]').click();allow=false;$('#leave').click();assert($('#typed'));allow=true;$('#leave').click();assert($('.path-shell'));
+const idle=new w.Event('beforeunload',{cancelable:true});w.dispatchEvent(idle);assert(!idle.defaultPrevented);
+dom.window.close();console.log('PASS: cancel/confirm leaving typing and audio, home guard, beforeunload only during unfinished rounds, existing XP retained.');

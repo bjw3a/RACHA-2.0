@@ -83,3 +83,67 @@
 .game-shell .feedback{margin-top:12px;padding:14px}
 .next-topic{display:block;width:100%;min-height:58px;font-size:21px;margin:16px 0}
 @media(max-width:520px){.game-shell .question{padding:16px}.game-shell .choice{min-height:48px}}
+
+/* Phase 4.7: retain Racha's palette and arcade cards, refine the mobile shell. */
+html{scroll-padding:12px}
+header{padding-top:max(18px,env(safe-area-inset-top));padding-left:max(28px,env(safe-area-inset-left));padding-right:max(28px,env(safe-area-inset-right))}
+main{padding-left:max(28px,env(safe-area-inset-left));padding-right:max(28px,env(safe-area-inset-right))}
+footer{padding-bottom:max(22px,env(safe-area-inset-bottom))}
+button,summary{touch-action:manipulation;min-height:44px}
+button{max-width:100%;overflow-wrap:anywhere}
+summary{padding-block:8px}
+.game-top>div,.choices>*,.match-grid>*,.settings{min-width:0}
+.game-top{flex-wrap:wrap}
+.game-top .quiet{flex-shrink:0}
+.choice>span:last-child{min-width:0;overflow-wrap:anywhere}
+.accent-keys button{min-width:44px;min-height:44px}
+#typed,#dictation{scroll-margin:16px;min-height:52px}
+#practice-next,#next{min-height:52px}
+#practice-feedback:empty,#practice-status:empty{display:none}
+#practice-status{min-height:0}
+#toast{pointer-events:none;bottom:max(16px,env(safe-area-inset-bottom))}
+@media(hover:none){button:hover:not(:disabled){transform:none}}
+@media(max-width:520px){
+ header{padding:12px max(12px,env(safe-area-inset-right)) 8px max(12px,env(safe-area-inset-left));gap:8px;flex-wrap:wrap}
+ main{padding:12px max(12px,env(safe-area-inset-right)) 28px max(12px,env(safe-area-inset-left));min-height:65svh}
+ .settings button{min-height:44px;font-size:12px}
+ .brand{min-height:44px}
+ .game-top{gap:8px;margin-bottom:12px;align-items:flex-start}
+ .game-top h2{margin:6px 0}
+ .game-top .eyebrow{font-size:11px;letter-spacing:1px}
+ .path-shell .game-top{flex-wrap:wrap}
+ .game-shell .question{padding:14px;margin-top:12px;border-radius:18px}
+ .game-shell .question h2{font-size:24px;margin:8px 0 14px}
+ .game-shell .choice{min-height:48px;padding:10px 12px;font-size:16px;gap:8px}
+ .game-shell .choices{gap:8px;margin:12px 0}
+ .hud{margin-bottom:10px}
+ .metric{padding:8px 4px}
+ .metric strong{font-size:20px}
+ .practice-progress{margin:12px 0 8px}
+ .practice-listen{margin:8px 0 12px;min-height:52px!important}
+ #dictation-form{margin-top:12px}
+ #dictation-form .accent-keys{margin:8px 0}
+ .accent-keys{gap:4px}
+ .accent-keys button{padding:6px 8px}
+ #practice-check,#practice-next,#next{width:100%}
+ #practice-next{margin-top:12px}
+ .input-actions{margin-top:8px;gap:8px}
+ .game-shell .feedback{padding:10px 0}
+ .tile{min-height:52px;padding:8px;line-height:1.35}
+ .match-column{gap:8px}
+ .next-activity{padding:18px}
+ .completion{padding:14px}
+ .level-map li{flex-wrap:wrap}
+ .level-map li>div{flex-basis:130px}
+}
+
+/* Phase 4.7.1: small, in-flow backup and compatibility panels. */
+.backup-panel,.migration-note{margin-top:24px;padding:16px;border:1px solid var(--line);border-radius:16px;background:var(--panel)}
+.backup-panel summary{cursor:pointer;font-weight:700}
+.backup-panel button{margin:8px 4px 8px 0;min-height:48px}
+.backup-panel .label{margin-top:16px}
+.backup-panel input[type=file]{font-size:16px;padding:12px;max-width:100%;min-width:0}
+.backup-panel input::file-selector-button{font:inherit;min-height:44px;max-width:100%;white-space:normal}
+.backup-panel [hidden]{display:none!important}
+.migration-note p{font-size:14px}
+@media(max-width:520px){.backup-panel button{width:100%}}

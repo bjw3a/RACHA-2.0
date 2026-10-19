@@ -13,3 +13,7 @@ modes.push(
  {id:'type',icon:'♪',name:'Listen & Type',desc:'Type what you hear in Spanish. Reach 80% to advance.'},
  {id:'record',icon:'◉',name:'Read & Record',desc:'Record, play back, and compare each prompt. Completion-based; no pronunciation grade.'}
 );
+
+// Stable IDs keep previously earned records compatible with the requested path.
+Object.assign(modes.find(m=>m.id==='streak'), {name:'Choose English',desc:'Read Spanish. Choose its English meaning.',detail:'Five questions. Reach 80% to advance.'});
+Object.assign(modes.find(m=>m.id==='story'), {name:'Mixed Review',desc:'Read and review your topic.',detail:'Read the passage, then answer five review questions. Reach 80% to advance.'});

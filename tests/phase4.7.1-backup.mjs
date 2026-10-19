@@ -1,0 +1,24 @@
+import assert from 'node:assert/strict';
+import {JSDOM} from 'jsdom';
+import {fresh,save,load,KEY} from '../js/storage.js';
+import {exportBackup,parseBackup,mergeProgress,backupView,bindBackup} from '../js/backup.js';
+const a=fresh();a.xp=500;a.games=7;a.achievements=['first'];a.mastery['1:greetings']={match:{best:100,completed:true,completedAt:'2026-10-01'},streak:{best:100,completed:true,completedAt:null}};a.bests={'1:greetings:match':10};
+assert.deepEqual(parseBackup(exportBackup(a)),a);
+const b=fresh();b.xp=100;b.games=10;b.achievements=['century'];b.mastery['1:greetings']={streak:{best:80,completed:true,completedAt:'2026-10-19',englishChoicePassed:true,englishChoiceBest:80},choose:{best:80,completed:true,completedAt:null}};b.bests={'1:greetings:match':12};
+const before=structuredClone(a),m=mergeProgress(a,b);assert.deepEqual(a,before);assert.equal(m.xp,500);assert.equal(m.games,10);assert.deepEqual(m.achievements,['first','century']);assert.equal(m.bests['1:greetings:match'],10);assert.equal(m.mastery['1:greetings'].streak.best,100);assert.equal(m.mastery['1:greetings'].streak.englishChoiceBest,80);assert(m.mastery['1:greetings'].match.completed);assert(m.mastery['1:greetings'].choose.completed);assert.deepEqual(mergeProgress(m,b),m);assert.deepEqual(parseBackup(exportBackup(m)),m);
+const valid=JSON.parse(exportBackup(a));
+const invalid=[null,[],{}, {...valid,version:2},{...valid,app:'other'},{...valid,progress:{}},{...valid,progress:{xp:-1}},{...valid,progress:{xp:1e100}},{...valid,progress:{sound:'yes'}},{...valid,progress:{mastery:[]}},{...valid,progress:{mastery:{'1:unknown':{}}}},{...valid,progress:{mastery:{'1:greetings':{quick:{best:50,completed:true}}}}},{...valid,progress:{mastery:{'1:greetings':{streak:{best:100,completed:true,englishChoicePassed:true,englishChoiceBest:40}}}}},{...valid,progress:{lastTopic:{course:2,topic:'greetings'}}},{...valid,progress:{completionDates:{'1:greetings':'bad'}}},{...valid,progress:{achievements:['made-up']}},{...valid,progress:{name:'private'}}];
+for(const item of invalid)assert.throws(()=>parseBackup(JSON.stringify(item)));
+assert.throws(()=>parseBackup('{broken'));assert.throws(()=>parseBackup(' '.repeat(1048577)));assert.throws(()=>parseBackup('{"app":"racha","version":1,"progress":{"__proto__":{"polluted":true}}}'));assert.equal({}.polluted,undefined);
+const dom=new JSDOM(`<main>${backupView()}</main>`,{url:'https://racha.test'});globalThis.document=dom.window.document;globalThis.window=dom.window;globalThis.localStorage=window.localStorage;
+save(a);let current=a;const main=document.querySelector('main');bindBackup(main,()=>current,p=>{current=p;});const input=document.querySelector('#import-progress'),confirm=document.querySelector('#confirm-import'),status=document.querySelector('#backup-status');
+const select=async(text,size=text.length)=>{Object.defineProperty(input,'files',{configurable:true,value:[{size,text:async()=>text}]});await input.onchange();};
+await select('{broken');assert(confirm.hidden);assert.equal(localStorage.getItem(KEY),JSON.stringify(a));
+await select(exportBackup(b));assert(!confirm.hidden);assert.equal(load().xp,500);document.querySelector('#cancel-import').click();assert(confirm.hidden);assert.deepEqual(current,a);
+await select(exportBackup(b));const original=window.Storage.prototype.setItem;window.Storage.prototype.setItem=()=>{throw Error('quota');};confirm.click();assert.match(status.textContent,/could not save/);assert.deepEqual(current,a);window.Storage.prototype.setItem=original;confirm.click();assert.deepEqual(current,m);assert.deepEqual(load(),m);assert(confirm.hidden);
+await select(exportBackup(b),1048577);assert(confirm.hidden);assert.deepEqual(load(),m);
+// A stale file read must not supersede a more recently selected backup.
+let release;Object.defineProperty(input,'files',{configurable:true,value:[{size:1,text:()=>new Promise(r=>release=r)}]});const old=input.onchange();await select('{broken');release(exportBackup(a));await old;assert(confirm.hidden);assert.match(status.textContent,/invalid JSON/);
+// Export download contains the validated envelope and never the separate saved name.
+localStorage.setItem('racha-student-name-v1','Private name');let downloaded=false,revoked=false;globalThis.URL={createObjectURL:()=> 'blob:test',revokeObjectURL:()=>{revoked=true;}};dom.window.HTMLAnchorElement.prototype.click=function(){assert.match(this.download,/Racha-progress-.*\.json/);downloaded=true;};document.querySelector('#export-progress').click();assert(downloaded);assert(!exportBackup(current).includes('Private name'));await new Promise(r=>setTimeout(r,1050));assert(revoked);dom.window.close();
+console.log('PASS: backup round trip; non-destructive/idempotent merge; historical/current Level 7 scores; malformed/oversized/unsupported/unsafe input rejection; preview/cancel/confirm; storage failure; stale reads; download cleanup; no names/recordings.');

@@ -30,8 +30,11 @@ export function practiceBank(course,selection){
 export function createPracticeSession(course,selection,mode){
  const bank=practiceBank(course,selection);
  if(mode==='choose'){
-  const short=shuffle(bank.choose.filter(i=>i.meaning)),comprehension=shuffle(bank.choose.filter(i=>!i.meaning));
-  return shuffle([...short.slice(0,7),...comprehension.slice(0,3),...short.slice(7),...comprehension.slice(3)].slice(0,10)).map(i=>({...i,choices:shuffle(i.choices)}));
+  const short=shuffle(bank.choose.filter(i=>i.meaning)),comprehension=shuffle(bank.choose.filter(i=>!i.meaning&&!introductoryTopic(course,i.topic)));
+  const selected=[...short.slice(0,7),...comprehension.slice(0,3),...short.slice(7),...comprehension.slice(3)].slice(0,10);
+  const originals=[...selected];
+  while(selected.length&&selected.length<10)selected.push(originals[(selected.length-originals.length)%originals.length]);
+  return spaceListening(selected).map(i=>({...i,choices:shuffle(i.choices)}));
  }
  // Introductory transcription/speaking uses only the taught vocabulary bank.
  // Later units retain the existing sentence progression; comprehension stays separate.
@@ -50,4 +53,24 @@ export function createPracticeSession(course,selection,mode){
  const originals=[...selected];
  while(selected.length && selected.length<10)selected.push({...originals[(selected.length-originals.length)%originals.length]});
  return selected;
+}
+
+// Use the same taught translations and vetted distractors as listening.
+export function englishQuestion(course,selection){
+ const item=shuffle(practiceBank(course,selection).choose.filter(i=>i.meaning))[0];
+ if(!item)throw new Error('Missing translation bank');
+ return {prompt:item.text,answers:[item.answer],pool:item.choices,explanation:`${item.text} = ${item.answer}`};
+}
+
+// Keep deliberate small-bank repetitions apart without adding untaught words.
+export function spaceListening(items){
+ const groups=new Map();
+ for(const item of shuffle(items)){const key=normalize(item.text);if(!groups.has(key))groups.set(key,[]);groups.get(key).push(item);}
+ const result=[];let previous=null;
+ while(result.length<items.length){
+  const available=[...groups.entries()].filter(([,v])=>v.length).sort((a,b)=>b[1].length-a[1].length);
+  const [key,group]=available.find(([key])=>key!==previous)||available[0];
+  result.push(group.pop());previous=key;
+ }
+ return result;
 }
